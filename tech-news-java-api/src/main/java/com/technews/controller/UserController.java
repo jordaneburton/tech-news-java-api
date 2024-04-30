@@ -4,9 +4,9 @@ import com.technews.model.Post;
 import com.technews.model.User;
 import com.technews.repository.UserRepository;
 import com.technews.repository.VoteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,13 +34,18 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}")
-    public Optional<User> getUserById(@PathVariable Integer id) {
-        Optional<User> returnUser = repository.findById(id);
-        List<Post> postList = returnUser.getPosts();
-        for (Post p : postList) {
-            p.setVoteCount(voteRepository.countVotesByPostId(p.getId()));
+    public User getUserById(@PathVariable Integer id) {
+        try {
+            Optional<User> optionalUser = repository.findById(id);
+            User returnUser = optionalUser.orElseThrow(() -> new EntityNotFoundException("User not found"));
+            List<Post> postList = returnUser.getPosts();
+            for (Post p : postList) {
+                p.setVoteCount(voteRepository.countVotesByPostId(p.getId()));
+            }
+            return returnUser;
+        } catch(EntityNotFoundException err) {
+            return null;
         }
-        return returnUser;
     }
 
     @PostMapping("/api/users")
@@ -53,7 +58,8 @@ public class UserController {
 
     @PutMapping("/api/users/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        Optional<User> tempUser = repository.findById(id);
+        Optional<User> optionalUser = repository.findById(id);
+        User tempUser = optionalUser.orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setId(tempUser.getId());
         repository.save(user);
         return user;
