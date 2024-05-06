@@ -13,7 +13,7 @@
         <h3>[[${notice}]]</h3>
     </div>
 
-    <div th:insert="fragments/post-fragment :: post-fragment"></div>
+    <div th:insert="~{fragments/post-fragment :: post-fragment}"></div>
 
     <form th:if="${loggedIn}" action="#" th:action="@{/comments}" th:object="${comment}" method="post" class="comment-form">
         <div>
@@ -28,7 +28,7 @@
     </form>
 
     <div class="comments">
-        <div th:insert="fragments/comment-fragment :: comment-fragment"></div>
+        <div th:insert="~{fragments/comment-fragment :: comment-fragment}"></div>
     </div>
     <div th:if="${loggedIn}">
         <script src="/js/upvote.js"></script>
