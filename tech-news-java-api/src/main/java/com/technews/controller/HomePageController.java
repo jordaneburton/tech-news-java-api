@@ -101,6 +101,12 @@ public class HomePageController {
         return "single-post";
     }
 
+    @GetMapping("/post/{id}")
+    public String singlePostPageSetup(@PathVariable int id, Model model, HttpServletRequest request) throws Exception {
+        setupSinglePostPage(id, model, request);
+        return "single-post";
+    }
+
     @GetMapping("/editPostEmptyComment/{id}")
     public String editPostEmptyCommentHandler(@PathVariable int id, Model model, HttpServletRequest request) throws Exception {
         if (request.getSession(false) != null) {
