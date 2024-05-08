@@ -12,6 +12,7 @@ This backend allows you to store users, "thoughts"(user posts), and "reactions"(
 ## Table of Contents 
 1. [Usage](#usage)
 2. [Challenges](#challenges)
+3. [Questions](#questions)
 
 ## <a id='usage'>Usage</a>
 
